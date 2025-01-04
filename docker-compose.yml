@@ -1,0 +1,23 @@
+version: '3.8'
+
+# ref: https://docs.localstack.cloud/getting-started/installation/#docker-compose
+services:
+  localstack:
+    container_name: "localstack"
+    image: localstack/localstack:${LOCALSTACK_VERSION:-3.6.0}
+    environment:
+      - DEBUG=${DEBUG:-1}
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+    ports:
+      - "127.0.0.1:4566:4566"
+      - "127.0.0.1:4510-4559:4510-4559"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+    networks:
+      - localstack-network
+
+networks:
+  localstack-network:
+    name: localstack-network
